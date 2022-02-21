@@ -37,11 +37,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <v-snackbar v-model="snackbar" :timeout="2000" top color="primary">
-      {{ text }}
-    </v-snackbar>
-    <!-- popup -->
   </v-app>
 </template>
 <script>
@@ -55,8 +50,6 @@ export default {
         email: "",
         avatar: "",
       },
-      snackbar: "",
-      text: "",
     };
   },
 
@@ -73,15 +66,15 @@ export default {
         .then((response) => {
           return response.json();
         })
-        .then((response) => {
+         .then((response) => {
           if (response["status"] === "ok") {
-            (this.snackbar = true), (this.text = response.message);
+            this.$nuxt.$emit('success' ,response.message,true);
           } else {
-            (this.snackbar = true), (this.text = response.message);
+            this.$nuxt.$emit('error' ,response.message,true);
           }
         })
         .then(() => {
-          this.$nuxt.$options.router.push("/");
+          this.$router.push("/");
         });
     },
   },

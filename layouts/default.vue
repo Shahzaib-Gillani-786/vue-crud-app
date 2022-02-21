@@ -1,11 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar absolute color="" fixed app>
-      <v-toolbar-title>Nuxt Crud App</v-toolbar-title>
-      <NuxtLink to="/CreateUser"
-        ><v-btn absolute right top color="blue lighten-1">Create user</v-btn>
-      </NuxtLink>
-    </v-app-bar>
+    <HeaderBar />
     <v-main>
       <client-only>
         <Nuxt />
@@ -15,6 +10,15 @@
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+    <v-snackbar
+      v-model="snackbar_error" :timeout="2000" top
+      color="red accent-2"
+    >
+      {{ text }}
+    </v-snackbar>
+    <v-snackbar  v-model="snackbar" :timeout="2000" top color="primary">
+      {{ text }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -24,7 +28,21 @@ export default {
   data() {
     return {
       fixed: false,
+      snackbar: "",
+      text: "",
+      snackbar_error:""
     };
+  },
+
+  created() {
+    this.$nuxt.$on("success", (message,bol) => {
+        (this.text = message),
+        (this.snackbar = bol)
+    });
+    this.$nuxt.$on("error", (message,bol) => {
+        (this.text = message),
+        (this.snackbar_error = bol)
+    });
   },
 };
 </script>
